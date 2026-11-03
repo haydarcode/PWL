@@ -1,0 +1,6 @@
+{
+  "http.proxySupport": "off",
+  "http.proxy": "",
+  "rest-client.excludeHostsForProxy": ["localhost", "127.0.0.1"],
+  "rest-client.timeoutinmilliseconds": 30000
+}

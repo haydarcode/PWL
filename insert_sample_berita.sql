@@ -1,0 +1,18 @@
+-- Data contoh berita untuk PostgreSQL.
+-- Jalankan setelah backend membuat tabel melalui Hibernate.
+-- Data approval_request memerlukan akun user dengan id_user = 1.
+
+INSERT INTO berita (judul, deskripsi, kategori, tanggal, file, slug, view) VALUES
+('Pengumuman Penerimaan Mahasiswa Baru 2024', 'Polinema Lumajang dengan bangga mengumumkan pembukaan pendaftaran mahasiswa baru tahun akademik 2024/2025. Pendaftaran dapat dilakukan melalui portal PMB kami.', 'Akademik', DATE '2024-04-15', '/uploads/berita/news-1.jpg', 'pengumuman-penerimaan-2024', 150),
+('Beasiswa Penuh untuk Mahasiswa Berprestasi', 'Program beasiswa penuh tersedia untuk mahasiswa dengan prestasi akademik luar biasa. Daftar sekarang dan dapatkan kesempatan emas untuk melanjutkan studi tanpa beban biaya.', 'Akademik', DATE '2024-04-10', '/uploads/berita/news-2.jpg', 'beasiswa-penuh-2024', 280),
+('Festival Kampus 2024 Akan Digelar Bulan Mei', 'Acara tahunan Festival Kampus Polinema Lumajang akan diselenggarakan pada bulan Mei 2024. Berbagai kegiatan menarik, workshop, dan hiburan akan memeriahkan acara ini.', 'Kemahasiswaan', DATE '2024-04-08', '/uploads/berita/news-3.jpg', 'festival-kampus-2024', 320),
+('Kerjasama dengan Industri Teknologi Terkemuka', 'Polinema Lumajang menjalin kerjasama strategis dengan perusahaan teknologi terkemuka untuk program magang dan penempatan lulusan.', 'Umum', DATE '2024-04-05', '/uploads/berita/news-4.jpg', 'kerjasama-industri-2024', 195),
+('Peluncuran Laboratorium Komputer Generasi Terbaru', 'Polinema Lumajang telah meluncurkan laboratorium komputer dengan perangkat terbaru untuk mendukung pembelajaran praktik mahasiswa.', 'Akademik', DATE '2024-04-01', '/uploads/berita/news-5.jpg', 'lab-komputer-terbaru', 250);
+
+-- Bagian berikut opsional: jalankan hanya jika user dengan id_user = 1 sudah tersedia.
+INSERT INTO approval_request (nama_tabel, target_id, action, status, payload, id_user) VALUES
+('berita', 1, 'Create', 'Approved', '{"judul":"Pengumuman Penerimaan Mahasiswa Baru 2024","deskripsi":"Polinema Lumajang dengan bangga mengumumkan pembukaan pendaftaran mahasiswa baru tahun akademik 2024/2025. Pendaftaran dapat dilakukan melalui portal PMB kami.","kategori":"Akademik","tanggal":"2024-04-15","file":"/uploads/berita/news-1.jpg","slug":"pengumuman-penerimaan-2024","view":150}'::json, 1),
+('berita', 2, 'Create', 'Approved', '{"judul":"Beasiswa Penuh untuk Mahasiswa Berprestasi","deskripsi":"Program beasiswa penuh tersedia untuk mahasiswa dengan prestasi akademik luar biasa.","kategori":"Akademik","tanggal":"2024-04-10","file":"/uploads/berita/news-2.jpg","slug":"beasiswa-penuh-2024","view":280}'::json, 1),
+('berita', 3, 'Create', 'Approved', '{"judul":"Festival Kampus 2024 Akan Digelar Bulan Mei","deskripsi":"Acara tahunan Festival Kampus Polinema Lumajang akan diselenggarakan pada bulan Mei 2024.","kategori":"Kemahasiswaan","tanggal":"2024-04-08","file":"/uploads/berita/news-3.jpg","slug":"festival-kampus-2024","view":320}'::json, 1),
+('berita', 4, 'Create', 'Approved', '{"judul":"Kerjasama dengan Industri Teknologi Terkemuka","deskripsi":"Polinema Lumajang menjalin kerjasama strategis dengan perusahaan teknologi terkemuka untuk program magang dan penempatan lulusan.","kategori":"Umum","tanggal":"2024-04-05","file":"/uploads/berita/news-4.jpg","slug":"kerjasama-industri-2024","view":195}'::json, 1),
+('berita', 5, 'Create', 'Approved', '{"judul":"Peluncuran Laboratorium Komputer Generasi Terbaru","deskripsi":"Polinema Lumajang telah meluncurkan laboratorium komputer dengan perangkat terbaru untuk mendukung pembelajaran praktik mahasiswa.","kategori":"Akademik","tanggal":"2024-04-01","file":"/uploads/berita/news-5.jpg","slug":"lab-komputer-terbaru","view":250}'::json, 1);

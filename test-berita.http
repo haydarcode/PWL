@@ -1,0 +1,89 @@
+
+
+@baseUrl = http://127.0.0.1:8080
+@adminEmail = admin@polinema.ac.id
+@adminPassword = Admin123!
+
+### 1. LOGIN ADMIN -> 200, ada accessToken
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+###
+@token = {{login.response.body.$.accessToken}}
+
+### 2. CREATE tanpa token -> 401 atau 403 (tulis wajib login)
+POST {{baseUrl}}/api/berita
+Content-Type: application/json
+
+{
+  "judul": "Berita Tanpa Login",
+  "deskripsi": "Harus ditolak",
+  "kategori": "Umum",
+  "tanggal": "2026-11-03"
+}
+
+### 3. CREATE berita -> 201, ada id_berita dan slug
+# Jika 409 (judul sudah dipakai), jalankan DELETE (nomor 9) dulu atau ganti judulnya.
+# @name createBerita
+POST {{baseUrl}}/api/berita
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "judul": "Berita Uji Polinema",
+  "deskripsi": "Ini adalah isi berita uji untuk tes CRUD.",
+  "kategori": "Akademik",
+  "tanggal": "2026-11-03"
+}
+
+###
+@beritaId = {{createBerita.response.body.$.id_berita}}
+@beritaSlug = {{createBerita.response.body.$.slug}}
+
+### 4. CREATE data tidak lengkap (tanpa judul) -> 400
+POST {{baseUrl}}/api/berita
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "deskripsi": "Tanpa judul",
+  "kategori": "Umum",
+  "tanggal": "2026-11-03"
+}
+
+### 5. READ semua berita (publik) -> 200, berisi "Berita Uji Polinema"
+GET {{baseUrl}}/api/berita
+
+### 6. READ berdasarkan id -> 200
+GET {{baseUrl}}/api/berita/id/{{beritaId}}
+
+### 7. READ berdasarkan slug -> 200
+GET {{baseUrl}}/api/berita/slug/{{beritaSlug}}
+
+### 8. UPDATE berita -> 200, judul dan kategori berubah
+PUT {{baseUrl}}/api/berita/{{beritaId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "judul": "Berita Uji Polinema Revisi",
+  "deskripsi": "Isi berita sudah diperbarui.",
+  "kategori": "Kemahasiswaan",
+  "tanggal": "2026-11-04"
+}
+
+### 8b. READ setelah update -> 200, data sudah berubah
+GET {{baseUrl}}/api/berita/id/{{beritaId}}
+
+### 9. DELETE berita -> 204 (tanpa isi)
+DELETE {{baseUrl}}/api/berita/{{beritaId}}
+Authorization: Bearer {{token}}
+
+### 10. BUKTI DELETE: baca berita yang sudah dihapus -> 404
+GET {{baseUrl}}/api/berita/id/{{beritaId}}

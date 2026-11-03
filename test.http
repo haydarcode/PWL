@@ -1,0 +1,132 @@
+
+
+@baseUrl = http://127.0.0.1:8080
+@adminEmail = admin@polinema.ac.id
+@adminPassword = Admin123!
+
+########################################################################
+# A. LOGIN
+########################################################################
+
+### 1. LOGIN ADMIN  -> harapan: 200, ada accessToken, role = super_admin
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+###
+@token = {{login.response.body.$.accessToken}}
+
+### 2. LOGIN GAGAL (password salah)  -> harapan: 401 atau 403
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "salah123"
+}
+
+### 3. AKSES TANPA TOKEN  -> harapan: 401 atau 403
+GET {{baseUrl}}/api/user
+
+########################################################################
+# B. CRUD USER  (resource: /api/user, body berbentuk form)
+########################################################################
+
+### 4. READ semua user  -> harapan: 200, daftar berisi admin@polinema.ac.id
+GET {{baseUrl}}/api/user
+Authorization: Bearer {{token}}
+
+### 5. CREATE user uji  -> harapan: 200, ada "id_user"
+# Jika error "Email sudah terdaftar", jalankan nomor 9 (DELETE) dulu atau ganti emailnya.
+# @name createUser
+POST {{baseUrl}}/api/user
+Authorization: Bearer {{token}}
+Content-Type: application/x-www-form-urlencoded
+
+nama=User Uji&emailAdmin=useruji@polinema.ac.id&passwordAdmin=UserUji123!&role=admin_prodi&foto=default.png
+
+###
+@userId = {{createUser.response.body.$.id_user}}
+
+### 6. READ detail user uji  -> harapan: 200, email = useruji@polinema.ac.id
+GET {{baseUrl}}/api/user/{{userId}}
+Authorization: Bearer {{token}}
+
+### 7. UPDATE user uji  -> harapan: 200, email = useruji-update@polinema.ac.id
+PUT {{baseUrl}}/api/user/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/x-www-form-urlencoded
+
+email=useruji-update@polinema.ac.id&password=UserUji456!&role=admin_prodi
+
+### 8. READ lagi setelah update  -> harapan: 200, email sudah berubah
+GET {{baseUrl}}/api/user/{{userId}}
+Authorization: Bearer {{token}}
+
+### 9. DELETE user uji  -> harapan: 204 (tanpa isi)
+DELETE {{baseUrl}}/api/user/{{userId}}
+Authorization: Bearer {{token}}
+
+### 10. BUKTI DELETE: baca user yang sudah dihapus  -> harapan: error (404/500), bukan 200
+GET {{baseUrl}}/api/user/{{userId}}
+Authorization: Bearer {{token}}
+
+### 11. LOGIN dengan user uji yang sudah dihapus  -> harapan: 401 atau 403
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "useruji-update@polinema.ac.id",
+  "password": "UserUji456!"
+}
+
+########################################################################
+# C. CRUD JURNAL  (resource: /api/jurnal, body berbentuk JSON)  [opsional]
+########################################################################
+
+### 12. CREATE jurnal  -> harapan: 200, ada "id" dan "slug"
+# @name createJurnal
+POST {{baseUrl}}/api/jurnal
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "judul": "Jurnal Uji Polinema",
+  "gambar": "jurnal-uji.png",
+  "link": "https://example.com/jurnal-uji"
+}
+
+###
+@jurnalId = {{createJurnal.response.body.$.id}}
+
+### 13. READ semua jurnal  -> harapan: 200, berisi jurnal uji
+GET {{baseUrl}}/api/jurnal
+Authorization: Bearer {{token}}
+
+### 14. READ detail jurnal  -> harapan: 200
+GET {{baseUrl}}/api/jurnal/{{jurnalId}}
+Authorization: Bearer {{token}}
+
+### 15. UPDATE jurnal  -> harapan: 200, judul berubah
+PUT {{baseUrl}}/api/jurnal/{{jurnalId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "judul": "Jurnal Uji Polinema Revisi",
+  "gambar": "jurnal-uji.png",
+  "link": "https://example.com/jurnal-uji-revisi"
+}
+
+### 16. DELETE jurnal  -> harapan: 204
+DELETE {{baseUrl}}/api/jurnal/{{jurnalId}}
+Authorization: Bearer {{token}}
+
+### 17. BUKTI DELETE jurnal  -> harapan: 404
+GET {{baseUrl}}/api/jurnal/{{jurnalId}}
+Authorization: Bearer {{token}}

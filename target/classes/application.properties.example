@@ -1,0 +1,37 @@
+# DATABASE POSTGRESQL
+spring.datasource.url=jdbc:postgresql://localhost:5432/portal_polinema
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.username=postgres
+spring.datasource.password=ISI_PASSWORD_POSTGRESQL_KAMU
+spring.sql.init.mode=never
+
+# JPA / HIBERNATE
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# SERVER
+server.port=8080
+server.address=0.0.0.0
+
+# FILE UPLOAD
+spring.servlet.multipart.max-file-size=25MB
+spring.servlet.multipart.max-request-size=25MB
+
+# JWT
+jwt.secret=3tq31yFlNEOpKyvUkj45f1vawY0vYGumVdhO9vBKHs8=
+jwt.expiration=36000000
+
+# DIREKTORI UPLOAD
+dir-uploads=./uploads
+dir-prodi=${dir-uploads}/prodi
+dir-pengumuman=${dir-uploads}/pengumuman
+dir-berita=${dir-uploads}/berita
+dir-pmb=${dir-uploads}/pmb
+dir-kalender_akademik=${dir-uploads}/kalender_akademik
+dir-kurikulum=${dir-uploads}/kurikulum
+dir-dosen=${dir-uploads}/dosen
+dir-user=${dir-uploads}/user
+
+# Aktifkan hanya untuk membuat akun demo lokal
+app.bootstrap-admin.enabled=false
