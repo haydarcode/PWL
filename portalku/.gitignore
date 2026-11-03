@@ -1,0 +1,14 @@
+HELP.md
+target/
+uploads/
+*.log
+application-local.properties
+.mvn/wrapper/maven-wrapper.jar
+
+### IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
